@@ -8,40 +8,50 @@ import googleapiclient.errors
 
 # Loading YT key and setting static variables
 load_dotenv()
-YT_API_KEY: str = os.getenv("YOUTUBE_API_KEY", "")
-CLIENT_SECRETS_FILE: str = "YT.json"
-API_SERVICE_NAME: str = "youtube"
-API_VERSION: str = "v3"
-SCOPES: list[str] = ["https://www.googleapis.com/auth/youtube.readonly"]
 
 # Disable OAuthlib's HTTPS verification when running locally.
 # *DO NOT* leave this option enabled in production.
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-# Get credentials and create an API client
-flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-    CLIENT_SECRETS_FILE, SCOPES
-)
-credentials = flow.run_local_server(port=8080)
-youtube = googleapiclient.discovery.build(
-    API_SERVICE_NAME, API_VERSION, credentials=credentials
-)
 
-# Get subscriptions list JSON response file
-request = youtube.subscriptions().list(part="snippet,contentDetails", mine=True)
-response = request.execute()
+class YouTubeAPICallsClient:
+    def __init__(self) -> None:
+        self.__yt_api_key: str = os.getenv("YOUTUBE_API_KEY", "")
+        self.__client_secrets_file: str = "YT.json"
+        self.__api_service_name: str = "youtube"
+        self.__api_version: str = "v3"
+        self.__scopes: list[str] = ["https://www.googleapis.com/auth/youtube.readonly"]
+        self.youtube = self.create_client(port=8080)
 
-# Prepare cleaned subs info: title / description / channel ID
-subscriptons = response.get("items", [])
-cleaned_subscriptions: list = []
-print(f"Found {len(subscriptons)} subscriptions")
-for sub in subscriptons:
-    sub_data = sub["snippet"]
-    cleaned_subscriptions.append(
-        [
-            sub_data["title"],
-            sub_data["description"],
-            sub_data["resourceId"]["channelId"],
-        ]
-    )
-print(cleaned_subscriptions)
+    def create_client(self, port):
+        """Create and authenticate YouTube API client"""
+        # Get credentials and create an API client
+        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+            self.__client_secrets_file, self.__scopes
+        )
+        credentials = flow.run_local_server(port=port)
+        return googleapiclient.discovery.build(
+            self.__api_service_name, self.__api_version, credentials=credentials
+        )
+
+    def get_subscriptions_info(self) -> list[list[str]]:
+        """Get cleaned subscription data: [title, description, channel_id]"""
+        request = self.youtube.subscriptions().list(
+            part="snippet,contentDetails", mine=True
+        )
+        response = request.execute()
+
+        # Prepare cleaned subs info: title / description / channel ID
+        subscriptions = response.get("items", [])
+        cleaned_subscriptions: list = []
+        print(f"Found {len(subscriptions)} subscriptions")
+        for sub in subscriptions:
+            sub_data = sub["snippet"]
+            cleaned_subscriptions.append(
+                [
+                    sub_data["title"],
+                    sub_data["description"],
+                    sub_data["resourceId"]["channelId"],
+                ]
+            )
+        return cleaned_subscriptions

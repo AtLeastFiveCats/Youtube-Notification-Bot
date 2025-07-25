@@ -1,3 +1,4 @@
 .env
 .venv/
 YT.json
+__pycache__/
