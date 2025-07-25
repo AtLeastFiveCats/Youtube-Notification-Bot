@@ -38,7 +38,10 @@ def main():
     request = youtube.subscriptions().list(part="snippet,contentDetails", mine=True)
     response = request.execute()
 
-    print(response)
+    # print(response)
+    print(f"Found {len(response.get('items', []))} subscriptions")
+    for item in response.get("items", []):
+        print(f"- {item['snippet']['title']}: {item['snippet']['description']}")
 
 
 if __name__ == "__main__":
