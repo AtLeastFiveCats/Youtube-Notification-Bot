@@ -26,22 +26,25 @@ class YouTubeAPICallsClient:
         self.youtube = self.create_client(port=8080)
 
     def create_client(self, port):
-        """Create and authenticate YouTube API client"""
+        """Create YouTube API client; cache credential to avoid constant relog."""
         credentials = None
 
+        # If there is credentials file, use it and avoid relog
         if os.path.exists(self.__credentials_file):
-            print("load cred")
+            print("Using existing credentials...")
             with open(self.__credentials_file, "rb") as token:
                 credentials = pickle.load(token)
 
+        # If there are no credentials, create them using browser authorization
         if not credentials:
-            # Get credentials and create an API client
             flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
                 self.__client_secrets_file, self.__scopes
             )
             credentials = flow.run_local_server(port=port)
+
+            # Save binary file for later user
             with open(self.__credentials_file, "wb") as token:
-                print("write cred")
+                print("Creating credentials binary...")
                 pickle.dump(credentials, token)
 
         return googleapiclient.discovery.build(
@@ -73,7 +76,7 @@ class YouTubeAPICallsClient:
     def get_videos_for_channel_ids(
         self, channel_ids: list[str], max_results: int = 10
     ) -> list[list[str]]:
-        """Get cleaned videos data for each channel ids: [title, description, video_id]"""
+        """Get cleaned videos data for each channel ids: [title, description, video url]"""
         responses = []
         for channel_id in channel_ids:
             request = self.youtube.search().list(
@@ -92,7 +95,7 @@ class YouTubeAPICallsClient:
                     [
                         item["snippet"]["title"],
                         item["snippet"]["description"],
-                        item["id"]["videoId"],
+                        f"https://www.youtube.com/watch?v={item['id']['videoId']}",
                     ]
                 )
 
