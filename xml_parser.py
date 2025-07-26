@@ -34,9 +34,24 @@ testxml = '''
 #This function should accept an xml formatted document and return the video title, channel, and url
 
 def xml_parser(testxml):
+    element_list = []
     xml_content = ET.fromstring(testxml)
-    for entry in xml_content.iter():
-        print(entry)
+    namespace = {
+            'atom': 'http://www.w3.org/2005/Atom',
+            'yt': 'http://www.youtube.com/xml/schemas/2015'
+        }
+
+    for entry in xml_content.findall('atom:entry', namespace):
+        id_element = entry.find('atom:id', namespace).text
+        title_element = entry.find('atom:title', namespace).text
+        url_attribute = entry.find('atom:link', namespace).get('href')
+        channel_element = entry.find('yt:channelId', namespace).text
+        element_list.append(id_element)
+        element_list.append(title_element)
+        element_list.append(url_attribute)
+        element_list.append(channel_element)
+
+    print(element_list)
 
 xml_parser(testxml)
 
