@@ -2,3 +2,4 @@
 .venv/
 YT.json
 __pycache__/
+YT.pickle

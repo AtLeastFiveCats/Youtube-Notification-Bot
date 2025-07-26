@@ -1,4 +1,5 @@
 import os
+import pickle
 from dotenv import load_dotenv
 
 # The Google APIs Client Libraries for Python
@@ -18,6 +19,7 @@ class YouTubeAPICallsClient:
     def __init__(self) -> None:
         self.__yt_api_key: str = os.getenv("YOUTUBE_API_KEY", "")
         self.__client_secrets_file: str = "YT.json"
+        self.__credentials_file: str = "YT.pickle"
         self.__api_service_name: str = "youtube"
         self.__api_version: str = "v3"
         self.__scopes: list[str] = ["https://www.googleapis.com/auth/youtube.readonly"]
@@ -25,11 +27,23 @@ class YouTubeAPICallsClient:
 
     def create_client(self, port):
         """Create and authenticate YouTube API client"""
-        # Get credentials and create an API client
-        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-            self.__client_secrets_file, self.__scopes
-        )
-        credentials = flow.run_local_server(port=port)
+        credentials = None
+
+        if os.path.exists(self.__credentials_file):
+            print("load cred")
+            with open(self.__credentials_file, "rb") as token:
+                credentials = pickle.load(token)
+
+        if not credentials:
+            # Get credentials and create an API client
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                self.__client_secrets_file, self.__scopes
+            )
+            credentials = flow.run_local_server(port=port)
+            with open(self.__credentials_file, "wb") as token:
+                print("write cred")
+                pickle.dump(credentials, token)
+
         return googleapiclient.discovery.build(
             self.__api_service_name, self.__api_version, credentials=credentials
         )
