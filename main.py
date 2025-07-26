@@ -13,8 +13,14 @@ def main():
     subs = client.get_subscriptions_info()
     # print(subs)
     # vids = client.get_videos_for_channel_ids([sub[2] for sub in subs])
-    decision = input("Which channel would you like to see videos of? Please provide a number: ") 
-    vids = client.get_videos_for_channel_ids([subs[int(decision) - 1][2]])
+    decision = int(
+        input(
+            "Which channel would you like to see videos of? Please provide a number: "
+        )
+    )
+
+    print(f"Displaying {subs[decision - 1][0]}'s Videos")
+    vids = client.get_videos_for_channel_ids([subs[decision - 1][2]])
     # Print vids nicely for user to choose
     for i, vid in enumerate(vids):
         print(f"\n{BOLD}{i + 1}. {vid[0]}{RESET}: {vid[1]}")

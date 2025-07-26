@@ -75,7 +75,6 @@ class YouTubeAPICallsClient:
                     sub_data["resourceId"]["channelId"],
                 ]
             )
-        print(f"Displaying {cleaned_subscriptions[0][0]}'s Videos")
         for i, sub in enumerate(cleaned_subscriptions):
             print(f"\n{BOLD}{i + 1}. {cleaned_subscriptions[i][0]}{RESET}")
         return cleaned_subscriptions
@@ -90,6 +89,7 @@ class YouTubeAPICallsClient:
                 part="snippet",
                 channelId=channel_id,
                 maxResults=max_results,  # default is 5
+                order="date",
                 type="video",  # other options: channel and playlist
                 videoDuration="medium",  # short: 4min-, medium: 4-20min, long: 20min+
             )
