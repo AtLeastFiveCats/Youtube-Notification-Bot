@@ -56,15 +56,18 @@ class YouTubeAPICallsClient:
             )
         return cleaned_subscriptions
 
-    def get_videos_for_channel_ids(self, channel_ids: list[str]) -> list[list[str]]:
+    def get_videos_for_channel_ids(
+        self, channel_ids: list[str], max_results: int = 10
+    ) -> list[list[str]]:
+        """Get cleaned videos data for each channel ids: [title, description, video_id]"""
         responses = []
         for channel_id in channel_ids:
             request = self.youtube.search().list(
                 part="snippet",
                 channelId=channel_id,
-                maxResults=10,
-                type="video",
-                videoDuration="medium",
+                maxResults=max_results,  # default is 5
+                type="video",  # other options: channel and playlist
+                videoDuration="medium",  # short: 4min-, medium: 4-20min, long: 20min+
             )
             responses.append(request.execute())
 
