@@ -52,7 +52,7 @@ Then the account you authorized to use with the bot has no subscriptions
 
 Either add some subscriptions or delete the YT.pickle file and rerun the script to authorize a different account
 
-**Potential Issues:**
+------------------------------------------------------------------------------------------------------------
 
 If the displayed videos are not the most recent videos uploaded from the channel then it is likely the newest videos are either too long or too short to be considered midform content and will not be displayed by the program. This is an issues we intend to fix down the line.
 
