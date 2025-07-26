@@ -9,8 +9,8 @@ def main():
     vids = client.get_videos_for_channel_ids([subs[0][2]])
     BOLD = "\033[1m"
     RESET = "\033[0m"
-    for vid in vids:
-        print(f"\n{BOLD}{vid[0]}{RESET}: {vid[1]}")
+    for i, vid in enumerate(vids):
+        print(f"\n{BOLD}{i + 1}. {vid[0]}{RESET}: {vid[1]}")
 
 
 if __name__ == "__main__":
