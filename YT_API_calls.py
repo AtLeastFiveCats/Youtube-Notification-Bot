@@ -43,7 +43,7 @@ class YouTubeAPICallsClient:
 
         # Prepare cleaned subs info: title / description / channel ID
         subscriptions = response.get("items", [])
-        cleaned_subscriptions: list = []
+        cleaned_subscriptions: list[list[str]] = []
         print(f"Found {len(subscriptions)} subscriptions")
         for sub in subscriptions:
             sub_data = sub["snippet"]
@@ -56,11 +56,27 @@ class YouTubeAPICallsClient:
             )
         return cleaned_subscriptions
 
-    def get_videos_for_channel_ids(self, channel_ids: list[str]):
+    def get_videos_for_channel_ids(self, channel_ids: list[str]) -> list[list[str]]:
         responses = []
         for channel_id in channel_ids:
             request = self.youtube.search().list(
-                part="snippet", channelId=channel_id, maxResults=10
+                part="snippet",
+                channelId=channel_id,
+                maxResults=10,
+                type="video",
+                videoDuration="medium",
             )
             responses.append(request.execute())
-        return responses
+
+        cleaned_videos: list[list[str]] = []
+        for response in responses:
+            for item in response["items"]:
+                cleaned_videos.append(
+                    [
+                        item["snippet"]["title"],
+                        item["snippet"]["description"],
+                        item["id"]["videoId"],
+                    ]
+                )
+
+        return cleaned_videos
