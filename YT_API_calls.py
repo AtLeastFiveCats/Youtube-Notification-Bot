@@ -7,6 +7,10 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 
+# Bolding prints to improve visibility
+BOLD = "\033[1m"
+RESET = "\033[0m"
+
 # Loading YT key and setting static variables
 load_dotenv()
 
@@ -71,6 +75,9 @@ class YouTubeAPICallsClient:
                     sub_data["resourceId"]["channelId"],
                 ]
             )
+        print(f"Displaying {cleaned_subscriptions[0][0]}'s Videos")
+        for i, sub in enumerate(cleaned_subscriptions):
+            print(f"\n{BOLD}{i + 1}. {cleaned_subscriptions[i][0]}{RESET}")
         return cleaned_subscriptions
 
     def get_videos_for_channel_ids(

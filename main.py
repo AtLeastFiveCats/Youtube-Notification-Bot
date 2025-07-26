@@ -13,12 +13,11 @@ def main():
     subs = client.get_subscriptions_info()
     # print(subs)
     # vids = client.get_videos_for_channel_ids([sub[2] for sub in subs])
-    vids = client.get_videos_for_channel_ids([subs[0][2]])
-
+    decision = input("Which channel would you like to see videos of? Please provide a number: ") 
+    vids = client.get_videos_for_channel_ids([subs[int(decision) - 1][2]])
     # Print vids nicely for user to choose
     for i, vid in enumerate(vids):
         print(f"\n{BOLD}{i + 1}. {vid[0]}{RESET}: {vid[1]}")
-
     # Loop for user to keep opening videos they want
     while True:
         decision = input("Choose video to watch by providing a number (q to quit): ")
