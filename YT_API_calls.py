@@ -55,6 +55,10 @@ class YouTubeAPICallsClient:
             self.__api_service_name, self.__api_version, credentials=credentials
         )
 
+    def print_results(self, list_to_print: list) -> None:
+        for i, item in enumerate(list_to_print):
+            print(f"\n{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
+
     def get_subscriptions_info(self) -> list[list[str]]:
         """Get cleaned subscription data: [title, description, channel_id]"""
         request = self.youtube.subscriptions().list(
@@ -75,9 +79,7 @@ class YouTubeAPICallsClient:
                     sub_data["resourceId"]["channelId"],
                 ]
             )
-        print(f"Displaying {cleaned_subscriptions[0][0]}'s Videos")
-        for i, sub in enumerate(cleaned_subscriptions):
-            print(f"\n{BOLD}{i + 1}. {cleaned_subscriptions[i][0]}{RESET}")
+        self.print_results(cleaned_subscriptions)
         return cleaned_subscriptions
 
     def get_videos_for_channel_ids(
@@ -90,6 +92,7 @@ class YouTubeAPICallsClient:
                 part="snippet",
                 channelId=channel_id,
                 maxResults=max_results,  # default is 5
+                order="date",
                 type="video",  # other options: channel and playlist
                 videoDuration="medium",  # short: 4min-, medium: 4-20min, long: 20min+
             )
@@ -106,4 +109,5 @@ class YouTubeAPICallsClient:
                     ]
                 )
 
+        self.print_results(cleaned_videos)
         return cleaned_videos
