@@ -34,37 +34,59 @@ def print_results(list_to_print: list) -> None:
         print(f"{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
 
 
-def make_a_decision(input_list: list) -> str | int:
+def make_a_decision(input_list: list, page: int = 0) -> str | int:
     """Function for making a decision with proper error handling."""
+    current_page = (
+        input_list[page * 10 : 10 + page * 10] if len(input_list) > 10 else input_list
+    )
     while True:
-        print_results(input_list)
+        print_results(current_page)
         decision = input(
             "\nMake a selection from above choices by providing a number; use letters for program navigation: "
         ).lower()
 
-        # Navigation
+        # Navigation, add strip to remove leading and trailing whitespaces
         if decision in CHOICES:
-            char_decision(decision)
+            return char_decision(decision.strip(), input_list, page)
 
-        # Acutal choice made; adjust indexing right away
-        if decision.isdigit() and 0 < int(decision) <= len(input_list):
-            return int(decision) - 1
+        print(decision)
+        print(page * 10)
+        # Acutal choice made; adjust indexing right away and add current page
+        if decision.isdigit() and 0 < int(decision) <= len(current_page):
+            return page * 10 + int(decision) - 1
 
         print("Invalid selection. Try again.\n")
 
 
-def char_decision(char: str) -> None:
+def char_decision(char: str, input_list: list, page: int) -> str | int:
     match char:
         case "q":
             sys.exit(0)
         case "n":
-            pass
+            if page == 4:
+                print(f"There is max {page + 1} pages. Cannot go further.")
+                return make_a_decision(input_list, page)
+            page += 1
+            return make_a_decision(input_list, page)
         case "p":
-            pass
+            page -= 1
+            make_a_decision(input_list, page)
         case "m":
             pass
         case "l":
             pass
+
+
+def choose_video(video_list) -> None:
+    # Make user choose videos from given channel, show only 10 newest
+    current_videos = video_list
+    current_video = make_a_decision(current_videos)
+
+    # Again, we already know that videos choice has been made so just show it to user
+    video_to_watch: str = current_videos[current_video][2]
+    webbrowser.open(video_to_watch)
+    # Add 0.5 s delay so the info about opening browser is printed in proper line
+    time.sleep(0.5)
 
 
 def main():
@@ -85,16 +107,7 @@ def main():
         print(
             f"\n{BOLD}{UNDERLINE}Displaying {subscriptions[current_channel][0]}'s Videos:{RESET}"
         )
-
-        # Make user choose videos from given channel, show only 10 newest
-        current_videos = videos[current_channel][:10]
-        current_video = make_a_decision(current_videos)
-
-        # Again, we already know that videos choice has been made so just show it to user
-        video_to_watch: str = current_videos[current_video][2]
-        webbrowser.open(video_to_watch)
-        # Add 0.5 s delay so the info about opening browser is printed in proper line
-        time.sleep(0.5)
+        choose_video(videos[current_channel])
 
 
 if __name__ == "__main__":
