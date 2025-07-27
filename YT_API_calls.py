@@ -54,7 +54,7 @@ class YouTubeAPICallsClient:
         )
 
     def get_subscriptions_info(self) -> list[list[str]]:
-        """Get cleaned subscription data: [title, description, channel_id]"""
+        """Get cleaned subscription data: [[title, description, channel_id], ...]"""
         request = self.youtube.subscriptions().list(
             part="snippet,contentDetails", mine=True
         )
@@ -75,30 +75,27 @@ class YouTubeAPICallsClient:
             )
         return cleaned_subscriptions
 
-    def get_videos_for_channel_ids(
-        self, channel_ids: list[str], max_results: int = 50, duration: str = "medium"
+    def get_videos_for_channel_id(
+        self, channel_id: str, max_results: int = 50, duration: str = "medium"
     ) -> list[list[str]]:
-        """Get cleaned videos data for each channel ids: [title, description, video url]"""
-        responses = []
-        for channel_id in channel_ids:
-            request = self.youtube.search().list(
-                part="snippet",
-                channelId=channel_id,
-                maxResults=max_results,  # API default is 5
-                order="date",
-                type="video",  # other options: channel and playlist
-                videoDuration=duration,  # short: 4min-, medium: 4-20min, long: 20min+
-            )
-            responses.append(request.execute())
+        """Get cleaned videos data for channel id: [[title, description, video url], ...]"""
+        request = self.youtube.search().list(
+            part="snippet",
+            channelId=channel_id,
+            maxResults=max_results,  # API default is 5
+            order="date",
+            type="video",  # other options: channel and playlist
+            videoDuration=duration,  # short: 4min-, medium: 4-20min, long: 20min+
+        )
+        response = request.execute()
 
         cleaned_videos: list[list[str]] = []
-        for response in responses:
-            for item in response["items"]:
-                cleaned_videos.append(
-                    [
-                        item["snippet"]["title"],
-                        item["snippet"]["description"],
-                        f"https://www.youtube.com/watch?v={item['id']['videoId']}",
-                    ]
-                )
+        for item in response["items"]:
+            cleaned_videos.append(
+                [
+                    item["snippet"]["title"],
+                    item["snippet"]["description"],
+                    f"https://www.youtube.com/watch?v={item['id']['videoId']}",
+                ]
+            )
         return cleaned_videos
