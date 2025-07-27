@@ -3,16 +3,18 @@ import time
 from YT_API_calls import YouTubeAPICallsClient
 
 
+CHOICES: dict[str, str] = {
+    "q": "quitting the program",
+    "quit": "quitting the program",
+    "n": "showing next results",
+    "p": "showing next results",
+}
+
+
 def hello_world() -> None:
     """Function to welcome user and let them know about basic functionality."""
-    choices: dict[str, str] = {
-        "q": "quitting the program",
-        "quit": "quitting the program",
-        "n": "showing next results",
-        "p": "showing next results",
-    }
     print("Welcome to the debloated, pro-attention span YT video chooser.")
-    for key, value in choices.items():
+    for key, value in CHOICES.items():
         print(f"Please use {key} for {value}.")
 
 
@@ -25,13 +27,20 @@ def print_results(list_to_print: list) -> None:
         print(f"\n{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
 
 
-def make_a_decision(input_list: list) -> str | int:
+def make_a_decision(input_list: list) -> str:
     """Function for making a decision with proper error handling."""
-    print_results(input_list)
-    decision = input(
-        "Make a selection from above choices by providing a number; user letters for program navigation: "
-    ).lower()
-    return decision
+    while True:
+        print_results(input_list)
+        decision = input(
+            "Make a selection from above choices by providing a number; use letters for program navigation: "
+        ).lower()
+
+        if decision in CHOICES or (
+            decision.isdigit() and 0 < int(decision) <= len(input_list)
+        ):
+            return decision
+
+        print("Invalid selection. Try again.")
 
 
 def main():
