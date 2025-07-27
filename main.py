@@ -2,13 +2,25 @@ import webbrowser
 import time
 from YT_API_calls import YouTubeAPICallsClient
 
-# Bolding prints to improve visibility
-BOLD = "\033[1m"
-RESET = "\033[0m"
+
+def hello_world() -> None:
+    """Function to welcome user and let them know about basic functionality."""
+    choices: dict[str, str] = {
+        "q": "quitting the program",
+        "quit": "quitting the program",
+        "n": "showing next results",
+        "p": "showing next results",
+    }
+    print("Welcome to the debloated, pro-attention span YT video chooser.")
+    for key, value in choices.items():
+        print(f"Please use {key} for {value}.")
 
 
 def print_results(list_to_print: list) -> None:
     """Function to print the fetched results for user in readable format."""
+    # Bolding prints to improve visibility
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
     for i, item in enumerate(list_to_print):
         print(f"\n{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
 
@@ -20,19 +32,6 @@ def make_a_decision(input_list: list) -> str | int:
         "Make a selection from above choices by providing a number; user letters for program navigation: "
     ).lower()
     return decision
-
-
-def hello_world() -> None:
-    """Function to welcome user and let them know about basic functionality."""
-    choices: dict[str, str] = {
-        "q": "quitting the program.",
-        "quit": "quitting the program.",
-        "n": "showing next results.",
-        "p": "showing next results.",
-    }
-    print("Welcome to the debloated, pro-attention span YT video chooser.")
-    for key, value in choices.items():
-        print(f"Please use {key} for {value}")
 
 
 def main():
