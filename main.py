@@ -34,7 +34,7 @@ def print_results(list_to_print: list) -> None:
         print(f"{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
 
 
-def make_a_decision(input_list: list) -> str:
+def make_a_decision(input_list: list) -> str | int:
     """Function for making a decision with proper error handling."""
     while True:
         print_results(input_list)
@@ -46,9 +46,9 @@ def make_a_decision(input_list: list) -> str:
         if decision in CHOICES:
             char_decision(decision)
 
-        # Acutal choice made
+        # Acutal choice made; adjust indexing right away
         if decision.isdigit() and 0 < int(decision) <= len(input_list):
-            return decision
+            return int(decision) - 1
 
         print("Invalid selection. Try again.\n")
 
@@ -82,9 +82,6 @@ def main():
         # Show logged user's subscriptions and ask which channel they wanna go to
         print(f"\n{BOLD}{UNDERLINE}Displaying current user's subscriptions:{RESET}")
         current_channel = make_a_decision(subscriptions)
-
-        # We already know that channel has been properly chosen so adjust the indexing diff a give info to confirm choice
-        current_channel = int(current_channel) - 1
         print(
             f"\n{BOLD}{UNDERLINE}Displaying {subscriptions[current_channel][0]}'s Videos:{RESET}"
         )
@@ -94,7 +91,7 @@ def main():
         current_video = make_a_decision(current_videos)
 
         # Again, we already know that videos choice has been made so just show it to user
-        video_to_watch: str = current_videos[int(current_video) - 1][2]
+        video_to_watch: str = current_videos[current_video][2]
         webbrowser.open(video_to_watch)
         # Add 0.5 s delay so the info about opening browser is printed in proper line
         time.sleep(0.5)
