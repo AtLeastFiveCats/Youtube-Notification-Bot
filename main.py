@@ -49,6 +49,8 @@ def main():
     # Start YT client, fetch subscriptions and videos
     client = YouTubeAPICallsClient()
     subscriptions = client.get_subscriptions_info()
+    if not subscriptions:
+        raise Exception("The logged account has no subscriptions, too much grass boi.")
     videos = [client.get_videos_for_channel_id(sub[2]) for sub in subscriptions]
 
     # Puts main logic in a while loop for easy traversal
