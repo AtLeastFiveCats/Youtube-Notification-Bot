@@ -1,9 +1,10 @@
+import sys
 import webbrowser
 import time
 from YT_API_calls import YouTubeAPICallsClient
 
 
-# Bolding prints to improve visibility
+# Bolding and underline prints to improve visibility
 BOLD = "\033[1m"
 UNDERLINE = "\033[4m"
 RESET = "\033[0m"
@@ -11,9 +12,10 @@ RESET = "\033[0m"
 # Letters used for program navigation; vim power
 CHOICES: dict[str, str] = {
     "q": "quitting the program",
-    "quit": "quitting the program",
     "n": "showing next results",
     "p": "showing next results",
+    "m": "change videos duration to 4 to 20 min",
+    "l": "change videos duration to above 20 min",
 }
 
 
@@ -40,12 +42,29 @@ def make_a_decision(input_list: list) -> str:
             "\nMake a selection from above choices by providing a number; use letters for program navigation: "
         ).lower()
 
-        if decision in CHOICES or (
-            decision.isdigit() and 0 < int(decision) <= len(input_list)
-        ):
+        # Navigation
+        if decision in CHOICES:
+            char_decision(decision)
+
+        # Acutal choice made
+        if decision.isdigit() and 0 < int(decision) <= len(input_list):
             return decision
 
         print("Invalid selection. Try again.\n")
+
+
+def char_decision(char: str) -> None:
+    match char:
+        case "q":
+            sys.exit(0)
+        case "n":
+            pass
+        case "p":
+            pass
+        case "m":
+            pass
+        case "l":
+            pass
 
 
 def main():
@@ -63,8 +82,6 @@ def main():
         # Show logged user's subscriptions and ask which channel they wanna go to
         print(f"\n{BOLD}{UNDERLINE}Displaying current user's subscriptions:{RESET}")
         current_channel = make_a_decision(subscriptions)
-        if current_channel in ["q", "quit"]:
-            break
 
         # We already know that channel has been properly chosen so adjust the indexing diff a give info to confirm choice
         current_channel = int(current_channel) - 1
@@ -75,8 +92,6 @@ def main():
         # Make user choose videos from given channel, show only 10 newest
         current_videos = videos[current_channel][:10]
         current_video = make_a_decision(current_videos)
-        if current_video in ["q", "quit"]:
-            break
 
         # Again, we already know that videos choice has been made so just show it to user
         video_to_watch: str = current_videos[int(current_video) - 1][2]
