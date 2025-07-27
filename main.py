@@ -49,8 +49,6 @@ def make_a_decision(input_list: list, page: int = 0) -> str | int:
         if decision in CHOICES:
             return char_decision(decision.strip(), input_list, page)
 
-        print(decision)
-        print(page * 10)
         # Acutal choice made; adjust indexing right away and add current page
         if decision.isdigit() and 0 < int(decision) <= len(current_page):
             return page * 10 + int(decision) - 1
@@ -64,13 +62,20 @@ def char_decision(char: str, input_list: list, page: int) -> str | int:
             sys.exit(0)
         case "n":
             if page == 4:
-                print(f"There is max {page + 1} pages. Cannot go further.")
+                print(
+                    f"{BOLD}{UNDERLINE}There is max {page + 1} pages. Cannot go further.{RESET}"
+                )
                 return make_a_decision(input_list, page)
             page += 1
             return make_a_decision(input_list, page)
         case "p":
+            if page == 0:
+                print(
+                    f"{BOLD}{UNDERLINE}Don't try to go below 0, that's simply rude.{RESET}"
+                )
+                return make_a_decision(input_list, page)
             page -= 1
-            make_a_decision(input_list, page)
+            return make_a_decision(input_list, page)
         case "m":
             pass
         case "l":
