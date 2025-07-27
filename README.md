@@ -12,6 +12,8 @@ For Windows
 
 ```powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"```
 
+To make sure its installed simply run ```uv```, it should give a description and the different options to run with it. To run the project simply navigate to the cloned root directory and type ```uv run main.py```. This will install all the needed dependancies but should error out as the API access hasn't been setup yet.
+
 **Enabling API Access**
 
 The next piece of overhead for this is to enable access to Google's API, this is about a 5 minute process

@@ -15,7 +15,7 @@ def main():
     subs = client.get_subscriptions_info()
     decision = int(
         input(
-            "Which channel would you like to see videos of? Please provide a number: "
+            "\nWhich channel would you like to see videos of? Please provide a number: "
         )
     )
     print(f"Displaying {subs[decision - 1][0]}'s Videos")

@@ -72,10 +72,13 @@ class YouTubeAPICallsClient:
         print(f"Found {len(subscriptions)} subscriptions")
         for sub in subscriptions:
             sub_data = sub["snippet"]
+            dirty_description: str = sub_data["description"]
+            split_description: list[str] = dirty_description.split("\n\n")
+            cleaned_description: str = split_description[0]
             cleaned_subscriptions.append(
                 [
                     sub_data["title"],
-                    sub_data["description"],
+                    cleaned_description,
                     sub_data["resourceId"]["channelId"],
                 ]
             )
@@ -100,7 +103,7 @@ class YouTubeAPICallsClient:
 
         cleaned_videos: list[list[str]] = []
         for response in responses:
-            for item in response["items"]:
+            for item in response["items"]: 
                 cleaned_videos.append(
                     [
                         item["snippet"]["title"],
