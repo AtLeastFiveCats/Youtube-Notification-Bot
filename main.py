@@ -19,25 +19,7 @@ CHOICES: dict[str, str] = {
 }
 
 
-def hello_world() -> None:
-    """Function to welcome user and let them know about basic functionality."""
-    print(
-        f"{BOLD}{UNDERLINE}Welcome to the debloated, pro-attention span YT video chooser.{RESET}"
-    )
-    for key, value in CHOICES.items():
-        print(f"Please use {key} for {value}.")
 
-
-def print_results(list_to_print: list) -> None:
-    """Function to print the fetched results for user in readable format."""
-    for i, item in enumerate(list_to_print):
-        print(f"{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
-
-
-def make_a_decision(input_list: list, page: int = 0) -> str | int:
-    """Function for making a decision with proper error handling."""
-    current_page = (
-        input_list[page * 10 : 10 + page * 10] if len(input_list) > 10 else input_list
     )
     while True:
         print_results(current_page)

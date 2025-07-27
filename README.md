@@ -1,7 +1,19 @@
-This project is designed to be able to retrieve YouTube information and interact with it through the terminal. It requires Youtube Data API v3 which this README will go over how to enable later.
+This project is designed to be able to retrieve YouTube information and interact with it through the terminal. The currently this Youtube terminal app is to be able to display your subscriptions and watch videos from said subscriptions. It requires Youtube Data API v3 which this README will go over how to enable later. The later goals of this app is to make the CLI interface smoother, give an option to watch in browser or in CLI, let the user choose what length videos they would like returned, and more features listed at the bottom of this README.
 
 **Dependencies**
-This project requires uv to run, its a wonderful package manager and virtual enviroment tool and more packed into one. It can be installed by running ```curl -LsSf https://astral.sh/uv/install.sh | sh``` in the Linux or MacOS terminal or by running ```powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"``` in Windows Powershell
+
+This project requires uv to run, its a wonderful package manager and virtual enviroment tool and more packed into one. It can be installed by a simple curl command or Powershell command on Windows
+
+For Linux and MacOS
+
+```curl -LsSf https://astral.sh/uv/install.sh | sh```
+ 
+For Windows
+
+```powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"```
+
+To make sure its installed simply run ```uv```, it should give a description and the different options to run with it. To run the project simply navigate to the cloned root directory and type ```uv run main.py```. This will install all the needed dependancies but should error out as the API access hasn't been setup yet.
+
 **Enabling API Access**
 
 The next piece of overhead for this is to enable access to Google's API, this is about a 5 minute process
@@ -27,6 +39,7 @@ The next piece of overhead for this is to enable access to Google's API, this is
 10. Lastly if 'Youtube Data API v3' has not been used on your developer account it will need to be enabled Navigate back to the left navigation panel -> 'APIs & Services' -> 'Library' -> Scroll to 'Youtube' -> 'YouTube Data API v3' -> 'Enable'
 
 **Potental Issues:**
+
 If this error pops up
 ```
   File "/home/gaming/Boot.dev/github.com/Atleastfivecats/main.py", line 9, in main
@@ -38,4 +51,20 @@ IndexError: list index out of range
 Then the account you authorized to use with the bot has no subscriptions
 
 **Fix:**
+
 Either add some subscriptions or delete the YT.pickle file and rerun the script to authorize a different account
+
+------------------------------------------------------------------------------------------------------------
+
+If the displayed videos are not the most recent videos uploaded from the channel then it is likely the newest videos are either too long or too short to be considered midform content and will not be displayed by the program. This is an issues we intend to fix down the line.
+
+**TODO**
+
+- Show more than 10 videos per channel
+- Add the ability to page between videos
+- Refactor UI to be cleaner
+- Add more safety checks for improper input
+- Add the option to display a different YouTube channel's videos
+- Add the ability to see shortform (-4 min), midform (4 - 20 min), or longform content (20+ min)
+- Potentially add a way to be notified of a new upload from a subscription
+
