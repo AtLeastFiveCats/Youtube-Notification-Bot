@@ -3,6 +3,12 @@ import time
 from YT_API_calls import YouTubeAPICallsClient
 
 
+# Bolding prints to improve visibility
+BOLD = "\033[1m"
+UNDERLINE = "\033[4m"
+RESET = "\033[0m"
+
+# Letters used for program navigation; vim power
 CHOICES: dict[str, str] = {
     "q": "quitting the program",
     "quit": "quitting the program",
@@ -13,18 +19,17 @@ CHOICES: dict[str, str] = {
 
 def hello_world() -> None:
     """Function to welcome user and let them know about basic functionality."""
-    print("Welcome to the debloated, pro-attention span YT video chooser.")
+    print(
+        f"{BOLD}{UNDERLINE}Welcome to the debloated, pro-attention span YT video chooser.{RESET}"
+    )
     for key, value in CHOICES.items():
         print(f"Please use {key} for {value}.")
 
 
 def print_results(list_to_print: list) -> None:
     """Function to print the fetched results for user in readable format."""
-    # Bolding prints to improve visibility
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
     for i, item in enumerate(list_to_print):
-        print(f"\n{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
+        print(f"{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
 
 
 def make_a_decision(input_list: list) -> str:
@@ -32,7 +37,7 @@ def make_a_decision(input_list: list) -> str:
     while True:
         print_results(input_list)
         decision = input(
-            "Make a selection from above choices by providing a number; use letters for program navigation: "
+            "\nMake a selection from above choices by providing a number; use letters for program navigation: "
         ).lower()
 
         if decision in CHOICES or (
@@ -40,7 +45,7 @@ def make_a_decision(input_list: list) -> str:
         ):
             return decision
 
-        print("Invalid selection. Try again.")
+        print("Invalid selection. Try again.\n")
 
 
 def main():
@@ -56,13 +61,16 @@ def main():
     # Puts main logic in a while loop for easy traversal
     while True:
         # Show logged user's subscriptions and ask which channel they wanna go to
+        print(f"\n{BOLD}{UNDERLINE}Displaying current user's subscriptions:{RESET}")
         current_channel = make_a_decision(subscriptions)
         if current_channel in ["q", "quit"]:
             break
 
         # We already know that channel has been properly chosen so adjust the indexing diff a give info to confirm choice
         current_channel = int(current_channel) - 1
-        print(f"Displaying {subscriptions[current_channel][0]}'s Videos")
+        print(
+            f"\n{BOLD}{UNDERLINE}Displaying {subscriptions[current_channel][0]}'s Videos:{RESET}"
+        )
 
         # Make user choose videos from given channel, show only 10 newest
         current_videos = videos[current_channel][:10]
