@@ -63,13 +63,12 @@ class YouTubeAPICallsClient:
         # Prepare cleaned subs info: title / description / channel ID
         subscriptions = response.get("items", [])
         cleaned_subscriptions: list[list[str]] = []
-        print(f"Found {len(subscriptions)} subscriptions")
         for sub in subscriptions:
             sub_data = sub["snippet"]
             cleaned_subscriptions.append(
                 [
                     sub_data["title"],
-                    sub_data["description"],
+                    sub_data["description"].splitlines()[0],
                     sub_data["resourceId"]["channelId"],
                 ]
             )

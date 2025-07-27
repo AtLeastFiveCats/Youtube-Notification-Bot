@@ -17,12 +17,27 @@ def make_a_decision(input_list: list) -> str | int:
     """Function for making a decision with proper error handling."""
     print_results(input_list)
     decision = input(
-        "Choose channel to watch by providing a number (q or quit to quit): "
+        "Make a selection from above choices by providing a number; user letters for program navigation: "
     ).lower()
     return decision
 
 
+def hello_world() -> None:
+    """Function to welcome user and let them know about basic functionality."""
+    choices: dict[str, str] = {
+        "q": "quitting the program.",
+        "quit": "quitting the program.",
+        "n": "showing next results.",
+        "p": "showing next results.",
+    }
+    print("Welcome to the debloated, pro-attention span YT video chooser.")
+    for key, value in choices.items():
+        print(f"Please use {key} for {value}")
+
+
 def main():
+    hello_world()
+
     # Start YT client, fetch subscriptions and videos
     client = YouTubeAPICallsClient()
     subscriptions = client.get_subscriptions_info()
