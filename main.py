@@ -7,12 +7,18 @@ BOLD = "\033[1m"
 RESET = "\033[0m"
 
 
+def print_results(list_to_print: list) -> None:
+    for i, item in enumerate(list_to_print):
+        print(f"\n{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
+
+
 def main():
     # Start YT client
     client = YouTubeAPICallsClient()
 
     # Get logged user's subscriptions and ask which channel they wanna go to
     subs = client.get_subscriptions_info()
+    print_results(subs)
     decision = int(
         input(
             "Which channel would you like to see videos of? Please provide a number: "
@@ -20,6 +26,7 @@ def main():
     )
     print(f"Displaying {subs[decision - 1][0]}'s Videos")
     vids = client.get_videos_for_channel_ids([subs[decision - 1][2]])
+    print_results(vids)
 
     # Loop for user to keep opening videos they want
     while True:
