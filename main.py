@@ -13,27 +13,13 @@ def print_results(list_to_print: list) -> None:
         print(f"\n{BOLD}{i + 1}. {item[0]}{RESET}: {item[1]}")
 
 
-def choose_channel(subscriptions: list) -> str | int:
-    print_results(subscriptions)
+def make_a_decision(input_list: list) -> str | int:
+    """Function for making a decision with proper error handling."""
+    print_results(input_list)
     decision = input(
-        "Which channel would you like to see videos of? Please provide a number: "
-    )
-    if decision == "q":
-        return "q"
-    print(f"Displaying {subscriptions[int(decision) - 1][0]}'s Videos")
-    return int(decision)
-
-
-def choose_video(videos: list) -> str | None:
-    print_results(videos)
-    decision = input("Choose video to watch by providing a number (q to quit): ")
-    if decision == "q":
-        return decision
-
-    video_to_watch: str = videos[int(decision) - 1][2]
-    webbrowser.open(video_to_watch)
-    # Add 0.5 s delay so the info about opening browser is printed in proper line
-    time.sleep(0.5)
+        "Choose channel to watch by providing a number (q or quit to quit): "
+    ).lower()
+    return decision
 
 
 def main():
@@ -45,13 +31,25 @@ def main():
     # Puts main logic in a while loop for easy traversal
     while True:
         # Show logged user's subscriptions and ask which channel they wanna go to
-        current_channel = choose_channel(subscriptions)
-        if current_channel == "q":
+        current_channel = make_a_decision(subscriptions)
+        if current_channel in ["q", "quit"]:
             break
 
-        current_video = choose_video(videos[current_channel - 1])
-        if current_video == "q":
+        # We already know that channel has been properly chosen so adjust the indexing diff a give info to confirm choice
+        current_channel = int(current_channel) - 1
+        print(f"Displaying {subscriptions[current_channel][0]}'s Videos")
+
+        # Make user choose videos from given channel, show only 10 newest
+        current_videos = videos[current_channel][:10]
+        current_video = make_a_decision(current_videos)
+        if current_video in ["q", "quit"]:
             break
+
+        # Again, we already know that videos choice has been made so just show it to user
+        video_to_watch: str = current_videos[int(current_video) - 1][2]
+        webbrowser.open(video_to_watch)
+        # Add 0.5 s delay so the info about opening browser is printed in proper line
+        time.sleep(0.5)
 
 
 if __name__ == "__main__":
