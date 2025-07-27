@@ -65,6 +65,6 @@ If the displayed videos are not the most recent videos uploaded from the channel
 - Refactor UI to be cleaner
 - Add more safety checks for improper input
 - Add the option to display a different YouTube channel's videos
-- Add the ability to see shortform (-4 min), midform (4 - 40 min), or longform content (40+ min)
+- Add the ability to see shortform (-4 min), midform (4 - 20 min), or longform content (20+ min)
 - Potentially add a way to be notified of a new upload from a subscription
 
