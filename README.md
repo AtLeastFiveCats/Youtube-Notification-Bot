@@ -1,5 +1,9 @@
 This project is designed to be able to retrieve YouTube information and interact with it through the terminal. The currently this Youtube terminal app is to be able to display your subscriptions and watch videos from said subscriptions. It requires Youtube Data API v3 which this README will go over how to enable later. The later goals of this app is to make the CLI interface smoother, give an option to watch in browser or in CLI, let the user choose what length videos they would like returned, and more features listed at the bottom of this README.
 
+**Examples**
+![subcriptions](images/subscriptions.png)
+![video choices](images/video_nav.png)
+
 **Dependencies**
 
 This project requires uv to run, its a wonderful package manager and virtual enviroment tool and more packed into one. It can be installed by a simple curl command or Powershell command on Windows
@@ -42,10 +46,7 @@ The next piece of overhead for this is to enable access to Google's API, this is
 
 If this error pops up
 ```
-  File "/home/gaming/Boot.dev/github.com/Atleastfivecats/main.py", line 9, in main
-    vids = client.get_videos_for_channel_ids([subs[0][2]])
-                                              ~~~~^^^
-IndexError: list index out of range
+The logged account has no subscriptions, touched too much grass boi!
 ```
 
 Then the account you authorized to use with the bot has no subscriptions
@@ -56,14 +57,15 @@ Either add some subscriptions or delete the YT.pickle file and rerun the script 
 
 ------------------------------------------------------------------------------------------------------------
 
-If the displayed videos are not the most recent videos uploaded from the channel then it is likely the newest videos are either too long or too short to be considered midform content and will not be displayed by the program. This is an issues we intend to fix down the line.
+~~If the displayed videos are not the most recent videos uploaded from the channel then it is likely the newest videos are either too long or too short to be considered midform content and will not be displayed by the program. This is an issues we intend to fix down the line.~~ **(Fixed)**
 
 **TODO**
 
-- Show more than 10 videos per channel
-- Add the ability to page between videos
+- ~~Show more than 10 videos per channel~~ **(Fixed)**
+- ~~Add the ability to page between videos~~ **(Fixed)**
 - Refactor UI to be cleaner
-- Add more safety checks for improper input
-- Add the option to display a different YouTube channel's videos
+- ~~Add more safety checks for improper input~~ **(Fixed)**
+- ~~Add the option to display a different YouTube channel's videos~~ **(Fixed)**
 - Add the ability to see shortform (-4 min), midform (4 - 20 min), or longform content (20+ min)
 - Potentially add a way to be notified of a new upload from a subscription
+- More coming down the pipeline
