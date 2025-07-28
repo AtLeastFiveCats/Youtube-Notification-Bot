@@ -1,11 +1,16 @@
+import pickle
 import sys
 import webbrowser
 import time
 import os
 from YT_API_calls import YouTubeAPICallsClient
 
+# Cached files to avoid token limit exceed
+SUBS_FILE = "backupsubs.pickle"
+VIDS_FILE = "backupvids.pickle"
 
 # Bolding and underline prints to improve visibility
+# Change into Enum???
 BOLD = "\033[1m"
 UNDERLINE = "\033[4m"
 RESET = "\033[0m"
@@ -17,12 +22,13 @@ CHOICES: dict[str, str] = {
     "p": "showing next results",
     "m": "change videos duration to 4 to 20 min",
     "l": "change videos duration to above 20 min",
+    "r": "refresh fetched data",
 }
 
 
 def hello_world() -> None:
     """Function to welcome user and let them know about basic functionality."""
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
     print(
         f"{BOLD}{UNDERLINE}Welcome to the debloated, pro-attention span YT video chooser.{RESET}"
     )
@@ -82,6 +88,8 @@ def char_decision(char: str, input_list: list, page: int) -> str | int:
             pass
         case "l":
             pass
+        case "r":
+            pass
 
 
 def choose_video(video_list) -> None:
@@ -101,15 +109,36 @@ def main():
 
     # Start YT client, fetch subscriptions and videos
     client = YouTubeAPICallsClient()
-    subscriptions = client.get_subscriptions_info()
+
+    # Used cached file if exist, otherwise fetch data.
+    if os.path.exists(SUBS_FILE):
+        print("Using existing subscriptions...")
+        with open(SUBS_FILE, "rb") as file:
+            subscriptions = pickle.load(file)
+    else:
+        subscriptions = client.get_subscriptions_info()
+        print("Creating cashed subscriptions...")
+        with open(SUBS_FILE, "wb") as file:
+            pickle.dump(subscriptions, file)
+
     if not subscriptions:
-        raise Exception("The logged account has no subscriptions, touched too much grass boi!")
-    videos = [client.get_videos_for_channel_id(sub[2]) for sub in subscriptions]
+        raise Exception(
+            "The logged account has no subscriptions, touched too much grass boi!"
+        )
+
+    # Used cached file if exist, otherwise fetch data.
+    if os.path.exists(VIDS_FILE):
+        print("Using existing videos...")
+        with open(VIDS_FILE, "rb") as file:
+            videos = pickle.load(file)
+    else:
+        videos = [client.get_videos_for_channel_id(sub[2]) for sub in subscriptions]
+        print("Creating cashed videos...")
+        with open(VIDS_FILE, "wb") as file:
+            pickle.dump(videos, file)
 
     # Puts main logic in a while loop for easy traversal
     while True:
-        # Calling hello world again clears the terminal and displays options again
-        hello_world()
         # Show logged user's subscriptions and ask which channel they wanna go to
         print(f"\n{BOLD}{UNDERLINE}Displaying current user's subscriptions:{RESET}")
         current_channel = make_a_decision(subscriptions)
@@ -117,6 +146,9 @@ def main():
             f"\n{BOLD}{UNDERLINE}Displaying {subscriptions[current_channel][0]}'s Videos:{RESET}"
         )
         choose_video(videos[current_channel])
+
+        # Calling hello world again clears the terminal and displays options again
+        hello_world()
 
 
 if __name__ == "__main__":

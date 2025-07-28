@@ -1,7 +1,7 @@
 .env
 .venv/
-YT.json
 __pycache__/
+YT.json
 YT.pickle
-backupsubs.py
-backupvids.py
+backupsubs.pickle
+backupvids.pickle

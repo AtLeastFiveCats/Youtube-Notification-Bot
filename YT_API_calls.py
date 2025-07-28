@@ -7,10 +7,6 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 
-# manualy added due to api limit exceeded
-# from old_backupsubs import subs
-# from old_backupvids import vids
-
 
 class YouTubeAPICallsClient:
     """YT client which makes API calls.
@@ -63,7 +59,7 @@ class YouTubeAPICallsClient:
             part="snippet,contentDetails", mine=True
         )
         response = request.execute()
-        # response = subs
+
         # Prepare cleaned subs info: title / description / channel ID
         subscriptions = response.get("items", [])
         cleaned_subscriptions: list[list[str]] = []
@@ -76,8 +72,6 @@ class YouTubeAPICallsClient:
                     sub_data["resourceId"]["channelId"],
                 ]
             )
-        with open("backupsubs.py", "wb") as file:
-            pickle.dump(cleaned_subscriptions, file)
 
         return cleaned_subscriptions
 
@@ -86,15 +80,15 @@ class YouTubeAPICallsClient:
     ) -> list[list[str]]:
         """Get cleaned videos data for channel id: [[title, description, video url], ...]"""
         request = self.youtube.search().list(
-             part="snippet",
-             channelId=channel_id,
-             maxResults=max_results,  # API default is 5
-             order="date",
-             type="video",  # other options: channel and playlist
-             videoDuration=duration,  # short: 4min-, medium: 4-20min, long: 20min+
+            part="snippet",
+            channelId=channel_id,
+            maxResults=max_results,  # API default is 5
+            order="date",
+            type="video",  # other options: channel and playlist
+            videoDuration=duration,  # short: 4min-, medium: 4-20min, long: 20min+
         )
-        response = request.execute() 
-        # reponse = vids
+        response = request.execute()
+
         cleaned_videos: list[list[str]] = []
         for item in response["items"]:
             cleaned_videos.append(
@@ -104,7 +98,5 @@ class YouTubeAPICallsClient:
                     f"https://www.youtube.com/watch?v={item['id']['videoId']}",
                 ]
             )
-        with open("backupvids.py", "wb") as file:
-            pickle.dump(cleaned_videos, file)
 
         return cleaned_videos
