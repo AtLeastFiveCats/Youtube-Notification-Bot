@@ -1,24 +1,85 @@
+# YouTube Terminal App
+
 This project is designed to be able to retrieve YouTube information and interact with it through the terminal. The currently this Youtube terminal app is to be able to display your subscriptions and watch videos from said subscriptions. It requires Youtube Data API v3 which this README will go over how to enable later. The later goals of this app is to make the CLI interface smoother, give an option to watch in browser or in CLI, let the user choose what length videos they would like returned, and more features listed at the bottom of this README.
 
 **Examples**
 ![subcriptions](images/subscription.png)
 ![video choices](images/video_nav.png)
 
+## Installation
+
+This project uses an automated installation script that handles all dependencies and setup.
+
+### Quick Install
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/AtLeastFiveCats/Youtube-Notification-Bot.git
+   cd Youtube-Notification-Bot
+   ```
+
+2. Run the installation script:
+   ```bash
+   chmod +x YT_install.sh
+   ./YT_install.sh
+   ```
+
+The installation script will:
+- Check if `uv` is installed and install it if needed
+- Install all project dependencies with `uv sync`
+- Create a global `YT_run.sh` command that you can run from anywhere
+
+### Running the App
+
+After installation, you can run the app in two ways:
+
+**Option 1: Global command (recommended)**
+```bash
+YT_run.sh
+```
+
+**Option 2: From project directory**
+```bash
+./YT_run.sh
+# or
+uv run main.py
+```
+
+The global `YT_run.sh` command works from any directory and automatically handles the virtual environment.
+
+## Manual Installation (Alternative)
+
+If you prefer to install manually:
+
 **Dependencies**
 
-This project requires uv to run, its a wonderful package manager and virtual enviroment tool and more packed into one. It can be installed by a simple curl command or Powershell command on Windows
+This project requires uv to run, it's a wonderful package manager and virtual environment tool packed into one.
 
-For Linux and MacOS
-
-```curl -LsSf https://astral.sh/uv/install.sh | sh```
+For Linux and MacOS:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
  
-For Windows
+For Windows:
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
 
-```powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"```
+To make sure it's installed, simply run `uv` - it should give a description and the different options. 
 
-To make sure its installed simply run ```uv```, it should give a description and the different options to run with it. To run the project simply navigate to the cloned root directory and type ```uv run main.py```. This will install all the needed dependancies but should error out as the API access hasn't been setup yet.
+Then install dependencies:
+```bash
+uv sync
+```
 
-**Enabling API Access**
+To run the project, navigate to the cloned root directory and type:
+```bash
+uv run main.py
+```
+
+This should error out initially as the API access hasn't been setup yet (see next section).
+
+## Enabling API Access
 
 The next piece of overhead for this is to enable access to Google's API, this is about a 5 minute process
 
