@@ -1,6 +1,7 @@
 import sys
 import webbrowser
 import time
+import os
 from YT_API_calls import YouTubeAPICallsClient
 
 
@@ -21,6 +22,7 @@ CHOICES: dict[str, str] = {
 
 def hello_world() -> None:
     """Function to welcome user and let them know about basic functionality."""
+    os.system('cls' if os.name == 'nt' else 'clear')
     print(
         f"{BOLD}{UNDERLINE}Welcome to the debloated, pro-attention span YT video chooser.{RESET}"
     )
@@ -106,6 +108,8 @@ def main():
 
     # Puts main logic in a while loop for easy traversal
     while True:
+        # Calling hello world again clears the terminal and displays options again
+        hello_world()
         # Show logged user's subscriptions and ask which channel they wanna go to
         print(f"\n{BOLD}{UNDERLINE}Displaying current user's subscriptions:{RESET}")
         current_channel = make_a_decision(subscriptions)

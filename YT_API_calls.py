@@ -98,7 +98,7 @@ class YouTubeAPICallsClient:
         for item in response["items"]:
             cleaned_videos.append(
                 [
-                    item["snippet"]["title"],
+                    item["snippet"]["title"].replace("&#39", "'"),
                     item["snippet"]["description"],
                     f"https://www.youtube.com/watch?v={item['id']['videoId']}",
                 ]
