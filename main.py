@@ -20,9 +20,9 @@ CHOICES: dict[str, str] = {
     "q": "quitting the program",
     "n": "showing next results",
     "p": "showing next results",
-    "m": "change videos duration to 4 to 20 min",
-    "l": "change videos duration to above 20 min",
-    "r": "refresh fetched data",
+    "m": "NOT WORKING YET change videos duration to 4 to 20 min",
+    "l": "NOT WORKING YET change videos duration to above 20 min",
+    "r": "NOT WORKING YET refresh fetched data",
 }
 
 
