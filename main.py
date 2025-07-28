@@ -65,11 +65,12 @@ def make_a_decision(input_list: list, page: int = 0) -> str | int:
 
 
 def char_decision(char: str, input_list: list, page: int) -> str | int:
+    max_pages: int = 0 if len(input_list) <= 10 else len(input_list) // 10
     match char:
         case "q":
             sys.exit(0)
         case "n":
-            if page == 4:
+            if page == max_pages:
                 print(
                     f"{BOLD}{UNDERLINE}There is max {page + 1} pages. Cannot go further.{RESET}"
                 )
