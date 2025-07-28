@@ -1,7 +1,7 @@
 This project is designed to be able to retrieve YouTube information and interact with it through the terminal. The currently this Youtube terminal app is to be able to display your subscriptions and watch videos from said subscriptions. It requires Youtube Data API v3 which this README will go over how to enable later. The later goals of this app is to make the CLI interface smoother, give an option to watch in browser or in CLI, let the user choose what length videos they would like returned, and more features listed at the bottom of this README.
 
 **Examples**
-![subcriptions](images/subscriptions.png)
+![subcriptions](images/subscription.png)
 ![video choices](images/video_nav.png)
 
 **Dependencies**
