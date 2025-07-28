@@ -1,16 +1,24 @@
 #!/bin/bash
 
-sudo curl -LsSf https://astral.sh/uv/install.sh | sh
-# Issues with uv displaying options when ran rather than executing the script
+# Check if uv is installed
+if ! command -v uv &> /dev/null; then
+    echo "uv not found. Installing..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    echo "uv installed successfully!"
+else
+    echo "uv is already installed."
+fi
 
-# Create a persistent alias with a comment in the terminal
-echo "" >> ~/.bashrc
-echo "# Creating an alias for Youtube terminal video selection" >> ~/.bashrc
-echo alias YT="'uv run main.py'" >> ~/.bashrc
+# Sync uv dependencies
+uv sync
 
-# Symlink might not work due to python not knowing where to import modules from if not ran in project directory
-sudo ln -s "$PWD/main.py" ~/.local/bin/
+# Make the runner script executable
+chmod +x YT_run.sh
 
-chmod +x $HOME/.local/bin/main.py
+# Create ~/.local/bin if it doesn't exist
+mkdir -p ~/.local/bin
 
+# Symlink to local bin so can be used from anywhere
+ln -sf "$PWD/YT_run.sh" ~/.local/bin/YT_run.sh
 
+echo "Installation complete!"
